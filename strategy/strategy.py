@@ -23,7 +23,7 @@
 import inspect
 from collections import namedtuple
 
-from strategy import promotions
+import promotions
 
 Customer = namedtuple('Customer', 'name fidelity')
 
