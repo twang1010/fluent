@@ -20,11 +20,11 @@
 <Order total: 10.00 due 9.30>
 >>> Order(joe, cart, large_order_promotion)
 <Order total: 42.00 due 42.00>
->>> Order(joe, long_order, best_promo)
+>>> Order(joe, long_order, best_promotion)
 <Order total: 10.00 due 9.30>
->>> Order(joe, banana_cart, best_promo)
+>>> Order(joe, banana_cart, best_promotion)
 <Order total: 30.00 due 28.50>
->>> Order(ann, cart, best_promo)
+>>> Order(ann, cart, best_promotion)
 <Order total: 42.00 due 39.90>
 """
 
@@ -85,8 +85,7 @@ def large_order_promotion(order):
     return 0
 
 
-promotion = [fidelity_promotion, bulk_item_promotion, large_order_promotion]
+promotion = [globals()[name] for name in globals() if name.endswith('_promotion') and name != 'best_promotion']
 
-
-def best_promo(order):
+def best_promotion(order):
     return max(promo(order) for promo in promotion)
