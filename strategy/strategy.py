@@ -20,9 +20,10 @@
 <Order total: 42.00 due 39.90>
 """
 
-from collections import namedtuple
 import inspect
-import promotions
+from collections import namedtuple
+
+from strategy import promotions
 
 Customer = namedtuple('Customer', 'name fidelity')
 
