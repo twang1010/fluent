@@ -7,19 +7,11 @@
 >>> cart = [LineItem('banana', 4, .5),
 ...         LineItem('apple', 10, 1.5),
 ...         LineItem('watermelon', 5, 5.0)]
->>> Order(joe, cart, fidelity_promotion)
-<Order total: 42.00 due 42.00>
->>> Order(ann, cart, fidelity_promotion)
-<Order total: 42.00 due 39.90>
->>> banana_cart = [LineItem('banana', 30, 0.5),
-...                LineItem('apple', 10, 1.5)]
->>> Order(joe, banana_cart, bulk_item_promotion)
-<Order total: 30.00 due 28.50>
->>> long_order =[LineItem(str(item_code), 1, 1.0) for item_code in range(10)]
->>> Order(joe, long_order, large_order_promotion)
-<Order total: 10.00 due 9.30>
->>> Order(joe, cart, large_order_promotion)
-<Order total: 42.00 due 42.00>
+>>> banana_cart = [LineItem('banana', 30, .5),
+... LineItem('apple', 10, 1.5)]
+>>> long_order = [LineItem(str(item_code), 1, 1.0)
+... for item_code in range(10)]
+
 >>> Order(joe, long_order, best_promotion)
 <Order total: 10.00 due 9.30>
 >>> Order(joe, banana_cart, best_promotion)
@@ -29,6 +21,8 @@
 """
 
 from collections import namedtuple
+import inspect
+import promotions
 
 Customer = namedtuple('Customer', 'name fidelity')
 
@@ -66,26 +60,7 @@ class Order:
         return fmt.format(self.total(), self.due())
 
 
-def fidelity_promotion(order):
-    return order.total() * 0.05 if order.customer.fidelity >= 1000 else 0
-
-
-def bulk_item_promotion(order):
-    discount = 0
-    for item in order.cart:
-        if item.quantity >= 20:
-            discount += item.total() * 0.1
-    return discount
-
-
-def large_order_promotion(order):
-    distinct_items = {item.product for item in order.cart}
-    if len(distinct_items) >= 10:
-        return order.total() * 0.07
-    return 0
-
-
-promotion = [globals()[name] for name in globals() if name.endswith('_promotion') and name != 'best_promotion']
+promos = [func for name, func in inspect.getmembers(promotions, inspect.isfunction)]
 
 def best_promotion(order):
-    return max(promo(order) for promo in promotion)
+    return max(promo(order) for promo in promos)
