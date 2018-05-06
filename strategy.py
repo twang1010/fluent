@@ -20,6 +20,12 @@
 <Order total: 10.00 due 9.30>
 >>> Order(joe, cart, large_order_promotion)
 <Order total: 42.00 due 42.00>
+>>> Order(joe, long_order, best_promo)
+<Order total: 10.00 due 9.30>
+>>> Order(joe, banana_cart, best_promo)
+<Order total: 30.00 due 28.50>
+>>> Order(ann, cart, best_promo)
+<Order total: 42.00 due 39.90>
 """
 
 from collections import namedtuple
@@ -77,3 +83,10 @@ def large_order_promotion(order):
     if len(distinct_items) >= 10:
         return order.total() * 0.07
     return 0
+
+
+promotion = [fidelity_promotion, bulk_item_promotion, large_order_promotion]
+
+
+def best_promo(order):
+    return max(promo(order) for promo in promotion)
