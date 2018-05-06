@@ -61,7 +61,5 @@ class Order:
         return fmt.format(self.total(), self.due())
 
 
-promos = [func for name, func in inspect.getmembers(promotions, inspect.isfunction)]
-
 def best_promotion(order):
-    return max(promo(order) for promo in promos)
+    return max(promo(order) for promo in promotions.registry)
