@@ -1,22 +1,28 @@
-registry = []
+# for fast access, replace list with set
+registry = set()
 
 
-def register(func):
-    print('running register {}'.format(func))
-    registry.append(func)
-    return func
+def register(active=True):
+    def decorate(func):
+        print('running register (active=%s)->decorate(%s)' % (active, func))
+        if active:
+            registry.add(func)
+        else:
+            registry.discard(func)
+        return func
+    return decorate
 
 
-@register
+@register()
 def f1():
     print('running f1()')
 
 
-@register
+@register(active=False)
 def f2():
     print('running f2()')
 
-
+@register()
 def f3():
     print('running f3()')
 
