@@ -27,6 +27,10 @@ b'd\\x00\\x00\\x00\\x00\\x00\\x00\\x08@\\x00\\x00\\x00\\x00\\x00\\x00\\x10@'
 True
 >>> vc is v1
 False
+>>> format(v1)
+'(3.0, 4.0)'
+>>> format(v1, '.4f')
+'(3.0000, 4.0000)'
 """
 
 from array import array
@@ -68,5 +72,9 @@ class Vector2d:
         bytecode = chr(octets[0])
         mem = memoryview(octets[1:]).cast(bytecode)
         return cls(*mem)
+
+    def __format__(self, format_spec=''):
+        component = (format(c, format_spec) for c in self)
+        return '({}, {})'.format(*component)
 
 
