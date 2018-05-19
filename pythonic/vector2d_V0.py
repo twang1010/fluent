@@ -20,6 +20,13 @@ b'd\\x00\\x00\\x00\\x00\\x00\\x00\\x08@\\x00\\x00\\x00\\x00\\x00\\x00\\x10@'
 5.0
 >>> bool(v1), bool(Vector2d(0, 0))
 (True, False)
+>>> vc = Vector2d.from_bytes(octets)
+>>> print(vc)
+(3.0, 4.0)
+>>> vc == v1
+True
+>>> vc is v1
+False
 """
 
 from array import array
@@ -55,4 +62,11 @@ class Vector2d:
 
     def __bool__(self):
         return bool(abs(self))
+
+    @classmethod
+    def from_bytes(cls, octets):
+        bytecode = chr(octets[0])
+        mem = memoryview(octets[1:]).cast(bytecode)
+        return cls(*mem)
+
 
