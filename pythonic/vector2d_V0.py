@@ -37,6 +37,12 @@ False
 '<1.414e+00, 7.854e-01>'
 >>> format(Vector2d(1, 1), '0.5fp')
 '<1.41421, 0.78540>'
+>>> v1 = Vector2d(3, 4)
+>>> v2 = Vector2d(3.1, 4.2)
+>>> hash(v1), hash(v2)
+(7, 384307168202284039)
+>>> set([v1, v2])
+{Vector2d(3.1, 4.2), Vector2d(3.0, 4.0)}
 """
 
 from array import array
@@ -48,8 +54,16 @@ class Vector2d:
     typecode = 'd'
 
     def __init__(self, x, y):
-        self.x = float(x)
-        self.y = float(y)
+        self.__x = float(x)
+        self.__y = float(y)
+
+    @property
+    def x(self):
+        return self.__x
+
+    @property
+    def y(self):
+        return self.__y
 
     def __iter__(self):
         return (i for i in (self.x, self.y))
@@ -66,6 +80,9 @@ class Vector2d:
 
     def __eq__(self, other):
         return tuple(self) == tuple(other)
+
+    def __hash__(self):
+        return hash(self.x) ^ hash(self.y)
 
     def __abs__(self):
         return math.hypot(self.x, self.y)
