@@ -31,6 +31,12 @@ False
 '(3.0, 4.0)'
 >>> format(v1, '.4f')
 '(3.0000, 4.0000)'
+>>> format(Vector2d(1, 1), 'p')
+'<1.4142135623730951, 0.7853981633974483>'
+>>> format(Vector2d(1, 1), '.3ep')
+'<1.414e+00, 7.854e-01>'
+>>> format(Vector2d(1, 1), '0.5fp')
+'<1.41421, 0.78540>'
 """
 
 from array import array
@@ -73,8 +79,19 @@ class Vector2d:
         mem = memoryview(octets[1:]).cast(bytecode)
         return cls(*mem)
 
+    def angle(self):
+        return math.atan2(self.x, self.y)
+
     def __format__(self, format_spec=''):
-        component = (format(c, format_spec) for c in self)
-        return '({}, {})'.format(*component)
+        if format_spec.endswith('p'):
+            format_spec = format_spec[:-1]
+            coord = (abs(self), self.angle())
+            outer_fmt = '<{}, {}>'
+        else:
+            coord = self
+            outer_fmt = '({}, {})'
+
+        component = (format(c, format_spec) for c in coord)
+        return outer_fmt.format(*component)
 
 
