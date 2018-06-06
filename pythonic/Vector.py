@@ -1,3 +1,14 @@
+"""
+>>> v1 = Vector([3,4,5])
+>>> len(v1)
+3
+>>> v1[0], v1[-1]
+(3.0, 5.0)
+>>> v7 = Vector(range(7))
+>>> v7[1:4]
+array('d', [1.0, 2.0, 3.0])
+"""
+
 from array import array
 import reprlib
 import math
@@ -36,3 +47,9 @@ class Vector(object):
         typecode = chr(octets[0])
         memv = memoryview(octets[1:])
         return cls(memv)
+
+    def __len__(self):
+        return len(self._components)
+
+    def __getitem__(self, index):
+        return self._components[index]
