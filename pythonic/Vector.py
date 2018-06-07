@@ -6,12 +6,19 @@
 (3.0, 5.0)
 >>> v7 = Vector(range(7))
 >>> v7[1:4]
-array('d', [1.0, 2.0, 3.0])
+Vector[[1.0, 2.0, 3.0]]
+>>> v7[-1:]
+Vector[[6.0]]
+>>> v7[1,2]
+Traceback (most recent call last):
+    ...
+TypeError: Vector indices must be integers
 """
 
 from array import array
 import reprlib
 import math
+import numbers
 
 class Vector(object):
     typecode = 'd'
@@ -52,4 +59,11 @@ class Vector(object):
         return len(self._components)
 
     def __getitem__(self, index):
-        return self._components[index]
+        cls = type(self)
+        if isinstance(index, slice):
+            return cls(self._components[index])
+        elif isinstance(index, numbers.Integral):
+            return self._components[index]
+        else:
+            msg = '{cls.__name__} indices must be integers'
+            raise TypeError(msg.format(cls=cls))
