@@ -111,4 +111,7 @@ class Vector2d:
         component = (format(c, format_spec) for c in coord)
         return outer_fmt.format(*component)
 
+vec = Vector2d(3, 4)
+print(dir(vec))
+print(dir(Vector2d))
 
