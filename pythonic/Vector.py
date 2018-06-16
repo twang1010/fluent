@@ -20,8 +20,9 @@ Vector[[0.0, 1.0, 2.0, 3.0, 4.0]]
 >>> v.x
 0.0
 >>> v.x = 10
->>> v.x
-10
+Traceback (most recent call last):
+    ...
+AttributeError: readonly attribute 'x'
 >>> v
 Vector[[0.0, 1.0, 2.0, 3.0, 4.0]]
 """
@@ -89,3 +90,17 @@ class Vector(object):
                 return self._components[pos]
         msg = '{.__name__!r} object has no attribute {!r}'
         raise AttributeError(msg.format(cls, name))
+
+    def __setattr__(self, name, value):
+        cls = type(self)
+        if len(name) == 1:
+            if name in cls.shortcut_names:
+                error = 'readonly attribute {attr_name!r}'
+            elif name.islower():
+                error = "can't set attribute 'a' to 'z' in {cls_name!r}"
+            else:
+                error = ''
+            if error:
+                msg = error.format(cls.__name__, attr_name=name)
+                raise AttributeError(msg)
+        super().__setattr__(name, value)
