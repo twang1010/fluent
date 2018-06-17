@@ -25,9 +25,14 @@ Traceback (most recent call last):
 AttributeError: readonly attribute 'x'
 >>> v
 Vector[[0.0, 1.0, 2.0, 3.0, 4.0]]
+>>> vv =Vector([0.0, 1.0, 2.0, 3.0, 4.0])
+>>> v == vv
+True
 """
 
 from array import array
+import functools
+import operator
 import reprlib
 import math
 import numbers
@@ -104,3 +109,7 @@ class Vector(object):
                 msg = error.format(cls.__name__, attr_name=name)
                 raise AttributeError(msg)
         super().__setattr__(name, value)
+
+    def __hash__(self):
+        hashs = map(hash, self._components)
+        return functools.reduce(operator.xor, hashs, 0)
