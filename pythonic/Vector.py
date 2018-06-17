@@ -57,8 +57,27 @@ class Vector(object):
     def __bytes__(self):
         return (bytes([ord(self.typecode)]) + bytes(self._components))
 
+    ''' 
+    old eq() method, low efficient
     def __eq__(self, other):
         return tuple(other) == tuple(self)
+    '''
+
+    '''
+    high efficient eq method
+
+    def __eq__(self, other):
+        if len(self) != len(other):
+            return False
+        for a, b in zip(self, other):
+            if a != b:
+                return False
+        return True
+    '''
+
+    '''consice implementation of high efficient eq'''
+    def __eq__(self, other):
+        return len(self) == len(other) and all(a == b for a, b in zip(self, other))
 
     def __abs__(self):
         return math.sqrt(sum(x*x for x in self))
