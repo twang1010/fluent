@@ -9,5 +9,12 @@ def looking_glass():
         ori_writer(text[::-1])
 
     sys.stdout.write = reverse_write
-    yield 'JABBERWOCKY'
-    sys.stdout.write = ori_writer
+    msg=''
+    try:
+        yield 'JABBERWOCKY'
+    except ZeroDivisionError:
+        msg = 'Please NO NOT divide by zero!'
+    finally:
+        sys.stdout.write = ori_writer
+        if msg:
+            print(msg)
