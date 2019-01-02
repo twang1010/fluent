@@ -4,10 +4,13 @@
 >>> ave_cc.send(10)
 >>> ave_cc.send(20)
 >>> ave_cc.send(30)
->>> ave_cc.send(None)
-Traceback (most recent call last):
-    ...
-StopIteration: Result(count=3, average=20.0)
+>>> try:
+...     ave_cc.send(None)
+... except StopIteration as ex:
+...     result = ex.value
+...
+>>> result
+Result(count=3, average=20.0)
 """
 
 from collections import namedtuple
